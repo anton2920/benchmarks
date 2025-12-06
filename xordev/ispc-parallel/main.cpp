@@ -58,7 +58,7 @@ main()
 	assert(pixels != nil);
 
 	fi = 0;
-	count = 10;
+	count = 100;
 	totalFrameTime = 0;
 	for (i = 0; i < count; i++) {
 		start = __rdtsc();

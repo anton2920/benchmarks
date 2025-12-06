@@ -65,8 +65,8 @@ ShaderLine(uniform uint32 pixels[], uniform int width, uniform int height, unifo
 
 	const uniform vec2 r = {width, height};
 	for (uniform int y = begin; y < end; y++) {
-		prefetch_l1(&pixels[y * width]);
-		prefetch_l2(&pixels[y * width + programCount]);
+		prefetchw_l1(&pixels[y * width]);
+		prefetchw_l1(&pixels[y * width + programCount]);
 
 		#pragma unroll 8
 		foreach (x = 0 ... width) {
