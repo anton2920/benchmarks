@@ -2,7 +2,7 @@ typedef float<2> vec2;
 typedef float<4> vec4;
 
 
-static
+static inline
 float
 dot(vec2 a, vec2 b)
 {
@@ -10,7 +10,7 @@ dot(vec2 a, vec2 b)
 }
 
 
-static
+static inline
 vec4
 sin(vec4 v)
 {
@@ -19,7 +19,7 @@ sin(vec4 v)
 }
 
 
-static
+static inline
 vec2
 cos(vec2 v)
 {
@@ -28,7 +28,7 @@ cos(vec2 v)
 }
 
 
-static
+static inline
 vec4
 exp(vec4 v)
 {
@@ -37,7 +37,7 @@ exp(vec4 v)
 }
 
 
-static
+static inline
 vec4
 tanh(vec4 v)
 {
@@ -65,6 +65,10 @@ Shader(uniform uint32 pixels[], uniform int width, uniform int height, uniform f
 
 	const uniform vec2 r = {width, height};
 	for (uniform int y = begin; y < end; y++) {
+		prefetch_l1(&pixels[y * width]);
+		prefetch_l2(&pixels[y * width + programCount]);
+
+		#pragma unroll 8
 		foreach (x = 0 ... width) {
 			vec4 o;
 			vec2 FC = {x, height-y};
@@ -74,6 +78,7 @@ Shader(uniform uint32 pixels[], uniform int width, uniform int height, uniform f
 			vec2 l = 4. - 4. * abs(.7 - dot(p, p));
 			vec2 v = p * l.x;
 
+			#pragma unroll 8
 			for (; i.y < 8.; o += (sin(v.xyyx) + 1.) * abs(v.x - v.y)) {
 				i.y++;
 				v += cos(v.yx * i.y + i + t) / i.y + .7;
