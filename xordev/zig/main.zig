@@ -26,7 +26,7 @@ pub fn Shader(pixels: []u32, width: i32, height: i32, t: f32) void {
 
 			var i: vec2 = @splat(0);
 			const p: vec2 = (FC * @as(vec2, @splat(2)) - r) / @as(vec2, @splat(r[1]));
-			const l: vec2 = @as(vec2, @splat(4)) - @as(vec2, @splat(4)) * @as(vec2, @splat(@abs(0.7 - dot(p, p))));
+			const l: vec2 = @as(vec2, @splat(4 - 4 * @abs(0.7 - dot(p, p))));
 			var v: vec2 = p * @as(vec2, @splat(l[0]));
 
 			while (i[1] < 8.0) : (o += (@sin(@as(vec4, .{v[0], v[1], v[1], v[0]})) + @as(vec4, @splat(1.0))) * @as(vec4, @splat(@abs(v[0] - v[1])))) {
