@@ -12,21 +12,11 @@ HEIGHT :: 600
 vec2 :: [2]f32
 vec4 :: [4]f32
 
-sin4 :: proc(v: vec4) -> vec4 {
-	return vec4{math.sin(v.x), math.sin(v.y), math.sin(v.z), math.sin(v.w)}
-}
-
-cos2 :: proc(v: vec2) -> vec2 {
-	return vec2{math.cos(v.x), math.cos(v.y)}
-}
-
-exp4 :: proc(v: vec4) -> vec4 {
-	return vec4{math.exp(v.x), math.exp(v.y), math.exp(v.z), math.exp(v.w)}
-}
-
 tanh4 :: proc(v: vec4) -> vec4 {
-	return (exp4(2*v) - 1) / (exp4(2*v) + 1)
+	return (linalg.exp(2*v) - 1) / (linalg.exp(2*v) + 1)
 }
+
+tanh :: tanh4
 
 Shader :: proc(pixels: []u32, width: int, height: int, t: f32) {
 	r := vec2{cast(f32)width, cast(f32)height}
@@ -41,11 +31,11 @@ Shader :: proc(pixels: []u32, width: int, height: int, t: f32) {
 			l : vec2 = 4. - 4. * abs(.7 - linalg.dot(p, p))
 			v := p * l.x
 
-			for ; i.y < 8.; o += (sin4(v.xyyx) + 1.) * abs(v.x - v.y) {
+			for ; i.y < 8.; o += (linalg.sin(v.xyyx) + 1.) * abs(v.x - v.y) {
 				i.y += 1
-				v += cos2(v.yx * i.y + i + t) / i.y + .7;
+				v += linalg.cos(v.yx * i.y + i + t) / i.y + .7;
 			}
-			o = tanh4(5. * exp4(l.x - 4. - p.y * vec4{-1, 1, 2, 0}) / o);
+			o = tanh(5. * linalg.exp(l.x - 4. - p.y * vec4{-1, 1, 2, 0}) / o);
 
 			pixels[y * width + x] = cast(u32)(o.r*255) << 24 | cast(u32)(o.g*255) << 16 | cast(u32)(o.b*255) << 8
 		}
