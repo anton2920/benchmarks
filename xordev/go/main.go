@@ -158,11 +158,12 @@ func main() {
 
 	println(runtime.Version())
 
+	var fi float32
 	var totalFrameTime cpu.Cycles
 	count := 10
 	for i := 0; i < count; i++ {
 		start := cpu.ReadPerformanceCounter()
-		Shader(pixels, WIDTH, HEIGHT, 0)
+		Shader(pixels, WIDTH, HEIGHT, fi)
 		end := cpu.ReadPerformanceCounter()
 		totalFrameTime += end - start
 	}

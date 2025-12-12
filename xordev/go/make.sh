@@ -1,4 +1,4 @@
 #!/bin/sh
 
-. go14-env
+# . go14-env
 go build -o main .
