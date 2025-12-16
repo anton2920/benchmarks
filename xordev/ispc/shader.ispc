@@ -23,11 +23,11 @@ Shader(uniform uint32 pixels[], uniform int width, uniform int height, uniform f
 		#pragma unroll 8
 		foreach (x = 0 ... width) {
 			vec4 o = 0;
-			vec2 FC = {x, height-y};
+			const vec2 FC = {x, height-y};
 
 			uniform vec2 i = 0;
-			vec2 p = (FC * 2 - r) / r.y;
-			vec2 l = 4 - 4 * abs(0.7 - dot(p, p));
+			const vec2 p = (FC * 2 - r) / r.y;
+			const vec2 l = 4 - 4 * abs(0.7 - dot(p, p));
 			vec2 v = p * l;
 
 			#pragma unroll 8
